@@ -3,6 +3,7 @@ import type { Post } from "@/types/post";
 const posts: Post[] = [
   {
     id: "1",
+    authorId: "u1",
     images: ["/posts/1-1.jpeg"],
     caption: "먼직귀: 먼가 직장다니고 귀신 들린거..",
     likes: 155,
@@ -10,6 +11,7 @@ const posts: Post[] = [
   },
   {
     id: "2",
+    authorId: "u1",
     images: ["/posts/2-1.jpeg", "/posts/2-2.jpeg"],
     caption: "나애 일상",
     likes: 123,
@@ -17,6 +19,7 @@ const posts: Post[] = [
   },
   {
     id: "3",
+    authorId: "u1",
     images: ["/posts/3-1.jpeg", "/posts/3-2.jpeg"],
     caption: "나애 꿈",
     likes: 102,
@@ -24,6 +27,7 @@ const posts: Post[] = [
   },
   {
     id: "4",
+    authorId: "u1",
     images: ["/posts/4-1.jpeg"],
     caption: "요즘 내 정신상태 헤헤",
     likes: 88,
@@ -39,4 +43,14 @@ export function getPosts(): Post[] {
 // id로 게시물 하나 찾기 (상세 페이지에서 사용). 없으면 undefined
 export function getPost(id: string): Post | undefined {
   return posts.find((post) => post.id === id);
+}
+
+// 특정 유저의 게시물만 (프로필 그리드에서 사용)
+export function getPostsByUserId(userId: string): Post[] {
+  return posts.filter((post) => post.authorId === userId);
+}
+
+// 피드용: 모든 게시물을 최신순으로
+export function getFeedPosts(): Post[] {
+  return [...posts].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }

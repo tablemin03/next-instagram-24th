@@ -2,6 +2,7 @@
 
 export type Post = {
   id: string; // 상세 페이지 주소에 쓰이는 값 (/p/1)
+  authorId: string; // 누가 썼는지 (User의 id)
   images: string[]; // 사진 경로 목록. 2장 이상이면 여러 장 게시물
   caption: string; // 본문
   likes: number; // 좋아요 수
