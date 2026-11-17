@@ -1,17 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import PostImageSlider from "@/components/PostImageSlider";
-import { getUserById } from "@/data/users";
 import { formatDate } from "@/utils/formatDate";
-import type { Post } from "@/types/post";
+import type { PostWithAuthor } from "@/types/post";
 
 type PostCardProps = {
-  post: Post;
+  post: PostWithAuthor;
 };
 
 // 피드에 들어가는 게시물 카드 하나
 export default function PostCard({ post }: PostCardProps) {
-  const author = getUserById(post.authorId);
+  const author = post;
   if (!author) return null;
 
   return (

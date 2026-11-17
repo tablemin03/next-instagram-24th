@@ -1,6 +1,7 @@
-import type { Post } from "@/types/post";
+import type { FeedPage, Post, PostWithAuthor } from "@/types/post";
+import { getUserById } from "@/data/users";
 
-const posts: Post[] = [
+const basePosts: Post[] = [
   {
     id: "1",
     authorId: "u1",
@@ -35,6 +36,20 @@ const posts: Post[] = [
   },
 ];
 
+// 무한 스크롤 확인용: sangmin(u2)이 쓴 게시물 26개를 기존 사진으로 만들기
+const extraPosts: Post[] = Array.from({ length: 26 }, (_, index) => {
+  const base = basePosts[index % basePosts.length];
+  return {
+    ...base,
+    id: String(index + 5),
+    authorId: "u2",
+    caption: `${base.caption} #${index + 5}`,
+    createdAt: `2025-04-${String(30 - index).padStart(2, "0")}`,
+  };
+});
+
+const posts: Post[] = [...basePosts, ...extraPosts];
+
 // 게시물 전체 목록 (그리드에서 사용)
 export function getPosts(): Post[] {
   return posts;
@@ -53,4 +68,21 @@ export function getPostsByUserId(userId: string): Post[] {
 // 피드용: 모든 게시물을 최신순으로
 export function getFeedPosts(): Post[] {
   return [...posts].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+const PAGE_SIZE = 5;
+
+// 피드 한 페이지: offset번째부터 5개 + 작성자 정보 붙이기
+export function getFeedPage(offset: number): FeedPage {
+  const feed = getFeedPosts();
+  const page = feed.slice(offset, offset + PAGE_SIZE);
+
+  const posts: PostWithAuthor[] = [];
+  for (const post of page) {
+    const author = getUserById(post.authorId);
+    if (author) posts.push({ ...post, author });
+  }
+
+  const nextOffset = offset + PAGE_SIZE < feed.length ? offset + PAGE_SIZE : null;
+  return { posts, nextOffset };
 }
