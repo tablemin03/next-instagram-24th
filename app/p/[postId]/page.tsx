@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { getPost, getPosts } from "@/data/posts";
 import { defaultUsername, myPageHref, profileImage } from "@/app/_lib/profile";
-import PostImageSlider from "./_components/PostImageSlider";
+import PostImageSlider from "@/components/PostImageSlider";
+import { formatDate } from "@/utils/formatDate";
 
 export function generateStaticParams() {
   return getPosts().map((post) => ({ postId: post.id }));
@@ -118,9 +119,4 @@ export default async function PostDetailPage({
 </div>
     </main>
   );
-}
-
-function formatDate(date: string) {
-  const [year, month, day] = date.split("-");
-  return `${year}년 ${Number(month)}월 ${Number(day)}일`;
 }
